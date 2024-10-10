@@ -18,7 +18,6 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
-        print('6')
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             response_data = {
@@ -41,8 +40,23 @@ class LoginView(TokenObtainPairView):
 
 
 class CustomTokenRefreshView(TokenRefreshView):
-    pass
+    def post(self, request, *args, **kwargs):
+        try:
+            # 调用父类的 post 方法进行 Token 刷新
+            response = super().post(request, *args, **kwargs)
 
+            # 如果 Token 刷新成功
+            if response.status_code == status.HTTP_200_OK:
+                response_data = {
+                    'token': response.data['access'],
+                }
+                return http_OK_response(message='Token 刷新成功', data=response_data)
+            else:
+                return http_BAD_response(message='Token 刷新失败')
+
+        except Exception as e:
+            # 返回明确的错误响应
+            return http_OK_response(message='Token 刷新成功', data={},code=11)
 
 
 class LogoutView(views.APIView):
@@ -63,7 +77,6 @@ class LogoutView(views.APIView):
 class UserInfoView(views.APIView):
     permission_classes = [AllowAny]
     def get(self, request, *args, **kwargs):
-        print('5')
         # 获取当前登录的用户
         user = request.user
         # 检查用户是否已登录
