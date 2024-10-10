@@ -6,19 +6,19 @@ from rest_framework import status
 """
 
 
-def http_OK_response(message, data=None):
+def http_OK_response(message, data=None,code=0):
     """返回网页的信息"""
     return Response({
-        'code': 0,
+        'code': code,
         'message': message,
         'data': data
     }, status=status.HTTP_200_OK)
 
 
-def http_BAD_response(message, data=None):
+def http_BAD_response(message, data=None,code=1):
     """返回网页的信息"""
     return Response({
-        'code': 1,
+        'code': code,
         'message': message,
         'data': data
     }, status=status.HTTP_400_BAD_REQUEST)

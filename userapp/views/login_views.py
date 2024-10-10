@@ -18,13 +18,12 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
-        print('6')
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             response_data = {
-                    'token': response.data['access']
+                    'token': response.data['access'],
+                    'refresh': response.data['refresh']
             }
-
             # refresh_token = response.data['refresh']
             # print(response.data)
             # response.set_cookie(
@@ -41,8 +40,23 @@ class LoginView(TokenObtainPairView):
 
 
 class CustomTokenRefreshView(TokenRefreshView):
-    pass
+    def post(self, request, *args, **kwargs):
+        try:
+            # 调用父类的 post 方法进行 Token 刷新
+            response = super().post(request, *args, **kwargs)
 
+            # 如果 Token 刷新成功
+            if response.status_code == status.HTTP_200_OK:
+                response_data = {
+                    'token': response.data['access'],
+                }
+                return http_OK_response(message='Token 刷新成功', data=response_data)
+            else:
+                return http_BAD_response(message='Token 刷新失败')
+
+        except Exception as e:
+            # 返回明确的错误响应
+            return http_OK_response(code=11,message=str(e))
 
 
 class LogoutView(views.APIView):
