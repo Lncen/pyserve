@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import generics, views
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -91,3 +92,17 @@ class UserInfoView(views.APIView):
             return http_OK_response(message='成功',data=response)
         else:
             return Response({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AdminChangePasswordView(views.APIView):
+    """用于管理重置密码"""
+    permission_classes = [IsAdminUser]
+    def post(self, request, *args, **kwargs):
+        # 获取用户
+        user_id = request.data.get('id')
+        user = User.objects.get(id=user_id)
+        # 设置新密码
+        user.set_password('778899')
+        user.save()
+        return http_OK_response(message='成功')
+

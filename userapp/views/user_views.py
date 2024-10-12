@@ -1,5 +1,3 @@
-from pickle import PROTO
-from tokenize import group
 
 from rest_framework import viewsets
 from userapp.models.user import User
@@ -9,10 +7,8 @@ from common.baseviews.basegenericAPIView import BaseGenericAPIView
 from ..serializers.user_serializer import UserGroupSerializer
 from django.contrib.auth.models import Group
 
-class CustomModelViewSet(BaseGenericAPIView, viewsets.ModelViewSet):
-    pass
 
-class UserViewSet(BaseGenericAPIView,viewsets.ModelViewSet):
+class UserViewSet(BaseGenericAPIView):
     """用户视图"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -21,5 +17,7 @@ class UserViewSet(BaseGenericAPIView,viewsets.ModelViewSet):
         response = super(UserViewSet, self).list(request, *args, **kwargs)
         group_all = Group.objects.all()
         group_all = UserGroupSerializer(group_all, many=True).data
-        response.data['group_all'] = group_all
+        response.data['data']['group_all'] = group_all
+
         return response
+

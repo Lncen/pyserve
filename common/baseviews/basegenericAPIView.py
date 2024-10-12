@@ -14,15 +14,13 @@ class ExampleViewSet(viewsets.ModelViewSet, BaseGenericAPIView):
 
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
+from rest_framework import viewsets
 
+class BaseGenericAPIView(viewsets.ModelViewSet):
+    def get_queryset(self):
+        """这里设置了排序"""
+        return self.queryset.order_by('id')
 
-class BaseGenericAPIView(generics.GenericAPIView):
-    """视图基类
-        perform_create 方法：负责实际的创建操作，调用序列化器的 save 方法来保存数据。
-        perform_update 方法：负责实际的更新操作，调用序列化器的 save 方法来保存数据。
-        perform_destroy 方法：负责实际的删除操作，调用实例的 delete 方法来删除数据。
-
-    """
     def http_OK_response(self, message, data):
         """
         返回一个 HTTP 200 OK 响应。
@@ -54,7 +52,6 @@ class BaseGenericAPIView(generics.GenericAPIView):
         """
         # 获取请求数据
         serializer = self.get_serializer(data=request.data)
-
         # 检查数据有效性
         if serializer.is_valid():
             # 在这里检查记录是否已经存在

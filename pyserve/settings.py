@@ -44,13 +44,13 @@ REST_FRAMEWORK = {
     ],
 
     # 分页
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,  # 设置默认每页大小为10
 }
 
 SIMPLE_JWT = {
     # 访问令牌的有效时间
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # 访问令牌在 5 分钟后过期
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=222),  # 访问令牌在 5 分钟后过期
 
     # 刷新令牌的有效时间
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # 刷新令牌在 1 天后过期

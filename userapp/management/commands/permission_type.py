@@ -8,7 +8,8 @@ from django.contrib.auth.models import Permission
 from rest_framework.decorators import permission_classes
 
 from userapp.models.permission_group import PermissionGroupName
-from userapp.serializers.permission_serializers import PermissionGroupNameSerializer,PermissionSerializer
+from userapp.serializers.permission_grop_serializers import PermissionGroupNameSerializer
+from userapp.serializers.permission_serializer import PermissionSerializer
 
 
 # 翻译字典
