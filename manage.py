@@ -12,9 +12,9 @@ def main():
 
     except ImportError as exc:
         raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
+            "无法导入 Django。您确定它已安装并且 "
+            "available 在您的 PYTHONPATH 环境变量上？你 "
+            "忘记激活虚拟环境？"
         ) from exc
 
 

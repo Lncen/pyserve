@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from userapp.views.login_views import LoginView,CustomTokenRefreshView,UserInfoView,LogoutView,AdminChangePasswordView
-from userapp.views.permission_groups_view import PermissionGroupNameTreeWithPermissionsView, PermissionGroupViewSet, PermissionGroupNameViewSet, PermissionViewSet
+from userapp.views.permission_groups_view import PermissionGroupViewSet, PermissionGroupNameViewSet, PermissionViewSet
 from userapp.views.user_views import UserViewSet
 from userapp.views.user_group_view import UserGroupViewSet
 
@@ -22,7 +22,6 @@ urlpatterns = [
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('logout/',LogoutView.as_view(),name='logout'),
     path('info/',UserInfoView.as_view(),name='user_info'),
-    path('psnt/',PermissionGroupNameTreeWithPermissionsView.as_view(),name='psnt'),
     path('acp/',AdminChangePasswordView.as_view(),name='acp')
 
 

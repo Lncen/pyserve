@@ -62,6 +62,7 @@ class PermissionWithTranslationSerializer:
 
             for k, v in zh_hans.items():
                 if group_name == v[1]:
+
                     parent_group = None if v[0] is None else PermissionGroupName.objects.get(name=v[0])
                     content_type = i.content_type
 
@@ -75,9 +76,9 @@ class PermissionWithTranslationSerializer:
                         name=v[1],
                         defaults=defaults
                     )
-                    break  # 找到匹配项后退出内层循环
+                    break  # 找到匹配项后退出内层循
 
-    print('权限分组更新完成')
+        print('权限分组更新完成')
 
 
 
@@ -91,6 +92,7 @@ class Command(BaseCommand):
     help = '打印所有权限及其翻译名称 和权限分组'
 
     def handle(self, *args, **options):
+        print('权限分组更新完成')
         # 获取所有 Permission 对象
-      PermissionWithTranslationSerializer().run()
+        PermissionWithTranslationSerializer().run()
 

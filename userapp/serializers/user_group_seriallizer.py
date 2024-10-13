@@ -54,20 +54,26 @@ class PermissionGroupNameTreeWithPermissionsSerializer(serializers.ModelSerializ
         # 获取当前用户的所有权限
         user_permissions = request.user.get_all_permissions()
         for child_group in child_groups:
+            # 检查用户是否具有该子分组的权限
+            has_permission = any(
+                perm.startswith(f"{child_group.content_type.app_label}.") for perm in user_permissions
+            )
 
-            # 递归调用序列化器以处理子分组
-            serialized_child = PermissionGroupNameTreeWithPermissionsSerializer(child_group, context=self.context).data
-            # 获取与当前子分组关联的权限，并筛选出用户拥有的权限
-            permission_qs = Permission.objects.filter(content_type_id=child_group.content_type_id)
-            permissions_data = [
-                {
-                    'id': i.id,
-                    'name': i.name
-                } for i in permission_qs
-                if f"{i.content_type.app_label}.{i.codename}" in user_permissions
-            ]
+            if has_permission:
 
-            if permissions_data:
-                serialized_child['children'] = permissions_data
-            children_data.append(serialized_child)
+                # 递归调用序列化器以处理子分组
+                serialized_child = PermissionGroupNameTreeWithPermissionsSerializer(child_group, context=self.context).data
+                # 获取与当前子分组关联的权限，并筛选出用户拥有的权限
+                permission_qs = Permission.objects.filter(content_type_id=child_group.content_type_id)
+                permissions_data = [
+                    {
+                        'id': i.id,
+                        'name': i.name
+                    } for i in permission_qs
+                    if f"{i.content_type.app_label}.{i.codename}" in user_permissions
+                ]
+
+                if permissions_data:
+                    serialized_child['children'] = permissions_data
+                children_data.append(serialized_child)
         return children_data

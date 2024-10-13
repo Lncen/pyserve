@@ -7,7 +7,6 @@ from userapp.serializers.user_group_seriallizer import UserGroupSerializer
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField
     balance = serializers.FloatField(default=0.0000)  # 显式指定 balance 字段为浮点型
-    # password = serializers.CharField(write_only=True)  # 添加密码字段，并设置为写入时只读
     class Meta:
         model = User
         #          ID    用户名       管理员      状态         积分       创建时间
@@ -40,6 +39,4 @@ class UserSerializer(serializers.ModelSerializer):
         # 为用户设置默认分组
         default_group, created = Group.objects.get_or_create(name='普通用户')  # 替换 'default-group' 为你的默认分组名称
         user.groups.add(default_group)
-
         return user
-

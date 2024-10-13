@@ -30,13 +30,3 @@ class PermissionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
     pagination_class = None  # 禁用分页
-
-class PermissionGroupNameTreeWithPermissionsView(generics.GenericAPIView):
-    serializer_class = PermissionGroupNameTreeWithPermissionsSerializer
-    queryset = PermissionGroupName.objects.all()  # 设置 queryset 属性
-
-    def get(self, request):
-        # 获取所有顶级分组
-        top_level_groups = self.get_queryset().filter(parent=None)
-        serializer = self.get_serializer(top_level_groups, many=True)
-        return Response(serializer.data)

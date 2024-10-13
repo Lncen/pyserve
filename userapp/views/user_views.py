@@ -14,10 +14,17 @@ class UserViewSet(BaseGenericAPIView):
     serializer_class = UserSerializer
 
     def list(self, request, *args, **kwargs):
-        response = super(UserViewSet, self).list(request, *args, **kwargs)
-        group_all = Group.objects.all()
-        group_all = UserGroupSerializer(group_all, many=True).data
-        response.data['data']['group_all'] = group_all
+        queryset = self.filter_queryset(self.get_queryset()).filter(is_superuser=False)
+        page = self.paginate_queryset(queryset)
+        # 处理分页
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            data = self.get_paginated_response(serializer.data).data
 
-        return response
+
+            group_all = Group.objects.all()
+            group_all = UserGroupSerializer(group_all, many=True).data
+            data['group_all'] = group_all
+            return self.http_OK_response(message='成功', data=data)
+
 
